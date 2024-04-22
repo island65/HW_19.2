@@ -1,0 +1,26 @@
+[
+  {
+    "model": "catalog.category",
+    "pk": 5,
+    "fields": {
+      "name": "Десерты",
+      "description": ""
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 6,
+    "fields": {
+      "name": "Овощи",
+      "description": ""
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 7,
+    "fields": {
+      "name": "Фрукты",
+      "description": ""
+    }
+  }
+]
