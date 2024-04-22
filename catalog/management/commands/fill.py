@@ -1,4 +1,4 @@
-import json
+﻿import json
 
 from django.core.management import BaseCommand
 
@@ -9,7 +9,7 @@ class Command(BaseCommand):
 
     @staticmethod
     def json_read_categories():
-        with open('category_data.json', encoding='utf8', errors='ignore') as file:
+        with open('category_data.json', encoding='utf8') as file:
             result = json.load(file)
             commands_list = []
             for item in result:
@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
     @staticmethod
     def json_read_products():
-        with open('product_date.json', encoding='utf8', errors='ignore') as file:
+        with open('products_data.json', encoding='utf8') as file:
             result = json.load(file)
             commands_list = []
             for item in result:
@@ -34,25 +34,23 @@ class Command(BaseCommand):
         product_for_create = []
         category_for_create = []
 
-# Обходим все значения категорий из фиктсуры для получения информации об одном объекте
+        # Обходим все значения категорий из фиктсуры для получения информации об одном объекте
         for category in Command.json_read_categories():
             category_for_create.append(
-                Category(id=category['pk'], name=category['fields']['name'], description=category['fields']
-                ['description'])
+                Category(id=category['pk'], name=category['fields']['name'],
+                         description=category['fields']['description'])
             )
 
-# Создаем объекты в базе с помощью метода bulk_create()
+        # Создаем объекты в базе с помощью метода bulk_create()
         Category.objects.bulk_create(category_for_create)
 
-# Обходим все значения продуктов из фиктсуры для получения информации об одном объекте
+        # Обходим все значения продуктов из фиктсуры для получения информации об одном объекте
         for product in Command.json_read_products():
             product_for_create.append(
-                Products(id=product['pk'],category=Category.objects.get(pk=product['fields']['category']),
-                        name=product['fields']['name'], price=product['field']['price'],
-                        description=product['fields']['description']))
-# получаем категорию из базы данных для корректной связки объектов
+                Products(id=product['pk'], category=Category.objects.get(pk=product['fields']['category']),
+                         name=product['fields']['name'], price=product['fields']['price'],
+                         description=product['fields']['description']))
+        # получаем категорию из базы данных для корректной связки объектов
 
-
-
-				# Создаем объекты в базе с помощью метода bulk_create()
+        # Создаем объекты в базе с помощью метода bulk_create()
         Products.objects.bulk_create(product_for_create)
