@@ -15,7 +15,7 @@ class Command(BaseCommand):
             for item in result:
                 commands_list.append(item)
             return commands_list
-        # Здесь мы получаем данные из фикстурв с категориями
+        # Здесь мы получаем данные из фикстуры с категориями
 
     @staticmethod
     def json_read_products():
@@ -25,7 +25,7 @@ class Command(BaseCommand):
             for item in result:
                 commands_list.append(item)
             return commands_list
-        # Здесь мы получаем данные из фикстурв с продуктами
+        # Здесь мы получаем данные из фикстуры с продуктами
 
     def handle(self, *args, **options):
         Products.objects.all().delete()

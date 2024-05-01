@@ -1,11 +1,11 @@
 [
   {
     "model": "catalog.products",
-    "pk": 2,
+    "pk": 8,
     "fields": {
       "name": "Шоколад",
       "description": "Белый и чёрный шоколад",
-      "image": "",
+      "image": "Choko.jpeg",
       "price": "250.00",
       "category": 5,
       "created_at": "2024-04-22T04:53:27Z",
@@ -14,7 +14,7 @@
   },
   {
     "model": "catalog.products",
-    "pk": 3,
+    "pk": 9,
     "fields": {
       "name": "Мармелад",
       "description": "",
@@ -27,7 +27,7 @@
   },
   {
     "model": "catalog.products",
-    "pk": 4,
+    "pk": 10,
     "fields": {
       "name": "Картофель",
       "description": "",
@@ -40,11 +40,11 @@
   },
   {
     "model": "catalog.products",
-    "pk": 5,
+    "pk": 11,
     "fields": {
       "name": "Капуста",
       "description": "",
-      "image": "",
+      "image": "/media/catalog/photo/Cabbage1.jpeg",
       "price": "60.00",
       "category": 6,
       "created_at": "2024-04-22T04:54:59Z",
@@ -53,7 +53,7 @@
   },
   {
     "model": "catalog.products",
-    "pk": 6,
+    "pk": 12,
     "fields": {
       "name": "Яблоки",
       "description": "",
@@ -66,11 +66,11 @@
   },
   {
     "model": "catalog.products",
-    "pk": 7,
+    "pk": 13,
     "fields": {
       "name": "Мандарины",
       "description": "",
-      "image": "",
+      "image": "Tangerines.jpeg",
       "price": "350.00",
       "category": 7,
       "created_at": "2024-04-22T04:55:40Z",
