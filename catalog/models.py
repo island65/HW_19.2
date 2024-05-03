@@ -24,7 +24,7 @@ class Products(models.Model):
     image = models.ImageField(upload_to='catalog/photo', verbose_name='Фото', **NULLABLE)
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория',
-                                 help_text='Введите категорию продукта', related_name='dogs')
+                                 help_text='Введите категорию продукта', related_name='Наименование')
     created_at = models.DateTimeField(default=timezone.now, verbose_name='Дата создания')
     updated_at = models.DateTimeField(default=timezone.now, verbose_name='Дата изменения')
 
