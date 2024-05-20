@@ -17,7 +17,7 @@ class BlogDetailView(DetailView):
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
-        self.object.view_count += 1
+        self.object.views_count += 1
         self.object.save()
         return self.object
 
@@ -28,10 +28,9 @@ class BlogCreateView(CreateView):
     success_url = reverse_lazy('blogging:list')
 
     def form_valid(self, form):
-        if form.is_valid():
-            new_blog = form.save()
-            new_blog.slug = slugify(new_blog.title)
-            new_blog.save()
+        new_blog = form.save(commit=False)
+        new_blog.slug = slugify(new_blog.title)
+        new_blog.save()
 
         return super().form_valid(form)
 
@@ -39,6 +38,13 @@ class BlogCreateView(CreateView):
 class BlogUpdateView(UpdateView):
     model = Blog
     fields = ('title', 'body', 'image',)
+
+    def form_valid(self, form):
+        new_blog = form.save(commit=False)
+        new_blog.slug = slugify(new_blog.title)
+        new_blog.save()
+
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse('blogging:detail', args=[self.kwargs.get('pk')])
