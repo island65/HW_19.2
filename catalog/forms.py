@@ -1,10 +1,10 @@
-from django.forms import ModelForm, forms
+from django.forms import forms
 
 from catalog.models import Products, Version
 from common.views import StyleFormMixin
 
 
-class ProductsForm(ModelForm, StyleFormMixin):
+class ProductsForm(StyleFormMixin):
     class Meta:
         model = Products
         exclude = ('views_count', 'created_at', 'updated_at')
@@ -13,7 +13,6 @@ class ProductsForm(ModelForm, StyleFormMixin):
         cleaned_data = self.cleaned_data.get('name')
         prohibited_words = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция',
                             'радар']
-        # my_set = set(prohibited_words)
         if cleaned_data in prohibited_words:
             raise forms.ValidationError('Данное слово нельзя использовать в карточке')
 
@@ -29,7 +28,7 @@ class ProductsForm(ModelForm, StyleFormMixin):
         return cleaned_data
 
 
-class VersionForm(ModelForm, StyleFormMixin):
+class VersionForm(StyleFormMixin):
     class Meta:
         model = Version
         fields = ('version_number', 'version_title', 'version_is_active')

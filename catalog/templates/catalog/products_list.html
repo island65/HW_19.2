@@ -23,8 +23,8 @@
                                 <a class="btn btn-primary" href="{% url 'products:products_delete' product.pk %}"
                                    role="button">Удалить</a>
                                 {% for status in product.version.all %}
-                                <p> Активная версия:<strong>{{ status.version_title }}</strong>
-                                <p> Номер версии:<strong>{{ status.version_number }}</strong>
+                                <p> Активная версия: <strong>{{ status.version_title }}</strong>
+                                <p> Номер версии: <strong>{{ status.version_number }}</strong>
                                     {% endfor %}
                                 </p>
                             </div>

@@ -17,3 +17,4 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Version)
 class VersionAdmin(admin.ModelAdmin):
     list_display = ('id', 'product')
+    list_filter = ('version_is_active',)
