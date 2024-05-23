@@ -11,6 +11,16 @@ from catalog.models import Products, Version
 class ProductsListView(ListView):
     model = Products
 
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        active_versions = []
+        for product in self.get_queryset():
+            version = product.version.filter(version_is_active=True).first()
+            active_versions.append(version)
+        context_data["versions"] = active_versions
+        return context_data
+
+
     # def get_context_data(self, **kwargs):
     #     context_data = super().get_context_data(**kwargs)
     #     self.object.views_count += 1

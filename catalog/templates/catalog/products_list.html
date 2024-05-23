@@ -22,9 +22,11 @@
                                    role="button">Редактировать</a>
                                 <a class="btn btn-primary" href="{% url 'products:products_delete' product.pk %}"
                                    role="button">Удалить</a>
-                                {% for status in product.version.all %}
-                                <p> Активная версия: <strong>{{ status.version_title }}</strong>
-                                <p> Номер версии: <strong>{{ status.version_number }}</strong>
+                                {% for version in versions %}
+                                {% if version.product == product %}
+                                <p> Активная версия: <strong>{{ version.version_title }}</strong>
+                                <p> Номер версии: <strong>{{ version.version_number }}</strong>
+                                    {% endif %}
                                     {% endfor %}
                                 </p>
                             </div>
