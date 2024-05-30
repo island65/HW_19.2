@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
+from users.models import User
+
 NULLABLE = {"null": True, "blank": True}
 
 
@@ -56,6 +58,12 @@ class Products(models.Model):
     )
     updated_at = models.DateTimeField(
         default=timezone.now, verbose_name="Дата изменения"
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        verbose_name="Создан пользователем",
+        **NULLABLE,
     )
 
     views_count = models.PositiveIntegerField(

@@ -1,6 +1,8 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
-# from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 
@@ -8,7 +10,7 @@ from catalog.forms import ProductsForm, VersionForm
 from catalog.models import Products, Version
 
 
-class ProductsListView(ListView):
+class ProductsListView(LoginRequiredMixin, ListView):
     model = Products
 
     def get_context_data(self, **kwargs):
@@ -38,7 +40,7 @@ class ProductsDetailView(DetailView):
         return self.object
 
 
-class ProductsCreateView(CreateView):
+class ProductsCreateView(LoginRequiredMixin, CreateView):
     model = Products
     # fields = ("name", "description", "price", "image", "category")
     form_class = ProductsForm
@@ -54,15 +56,16 @@ class ProductsCreateView(CreateView):
         return context_data
 
     def form_valid(self, form):
-        formset = self.get_context_data()['formset']
-        self.object = form.save()
-        if form.is_valid():
-            formset.instance = self.object
-            formset.save()
-        return super().form_valid(form)
+        if form.is_valid:
+            new_object = form.save(commit=False)
+            new_object.author = self.request.user
+            new_object.save()
+            return super().form_valid(form)
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
 
 
-class ProductsUpdateView(UpdateView):
+class ProductsUpdateView(LoginRequiredMixin, UpdateView):
     model = Products
     # fields = ("name", "description", "price", "image", "category")
     form_class = ProductsForm
@@ -81,15 +84,18 @@ class ProductsUpdateView(UpdateView):
         return context_data
 
     def form_valid(self, form):
-        formset = self.get_context_data()['formset']
-        self.object = form.save()
-        if formset.is_valid():
+        context_data = self.get_context_data()
+        formset = context_data['formset']
+        if form.is_valid() and formset.is_valid():
+            self.object = form.save()
             formset.instance = self.object
             formset.save()
-        return super().form_valid(form)
+            return super().form_valid(form)
+        else:
+            return self.render_to_response(self.get_context_data(form=form, formset=formset))
 
 
-class ProductsDeleteView(DeleteView):
+class ProductsDeleteView(LoginRequiredMixin, DeleteView):
     model = Products
     success_url = reverse_lazy('products:products_list')
 
@@ -104,11 +110,12 @@ class ContactsTemplateView(TemplateView):
     #     return context
 
     def post(self, request, *args, **kwargs):
-        name = request.POST.get('name')
-        phone = request.POST.get('phone')
-        message = request.POST.get('message')
-        print(f'Имя: {name} \nТелефон: {phone} \nСообщение: {message}')
-        return HttpResponseRedirect(reverse('catalog:contacts'))
+        if request.method == 'POST':
+            name = request.POST.get('name')
+            phone = request.POST.get('phone')
+            message = request.POST.get('message')
+            print(f'Имя: {name} \nТелефон: {phone} \nСообщение: {message}')
+        return render(request, self.template_name)
 
 # def products_list(request):
 #     products = Products.objects.all()
