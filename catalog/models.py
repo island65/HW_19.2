@@ -72,9 +72,16 @@ class Products(models.Model):
         help_text="Укажите количество просмотров",
     )
 
+    is_published = models.BooleanField(default=False, verbose_name="Признак публикации")
+
     class Meta:
         verbose_name = "продукт"
         verbose_name_plural = "продукты"
+        permissions = [
+            ('set_published_status', 'Can publish product'),
+            ('change_description', 'Can change product description'),
+            ('change_category', 'Can change product category'),
+        ]
 
     def __str__(self):
         return f"{self.name} {self.price}"

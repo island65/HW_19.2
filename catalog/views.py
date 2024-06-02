@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -6,7 +7,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from catalog.forms import ProductsForm, VersionForm
+from catalog.forms import ProductsForm, VersionForm, ProductsModeratorForm
 from catalog.models import Products, Version
 
 
@@ -21,7 +22,6 @@ class ProductsListView(LoginRequiredMixin, ListView):
             active_versions.append(version)
         context_data["versions"] = active_versions
         return context_data
-
 
     # def get_context_data(self, **kwargs):
     #     context_data = super().get_context_data(**kwargs)
@@ -93,6 +93,15 @@ class ProductsUpdateView(LoginRequiredMixin, UpdateView):
             return super().form_valid(form)
         else:
             return self.render_to_response(self.get_context_data(form=form, formset=formset))
+
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.user or user.is_superuser:
+            return ProductsForm
+        if (user.has_perm('catalog.set_published_status') and user.has_perm('catalog.change_description') and
+                user.has_perm('catalog.change_category')):
+            return ProductsModeratorForm
+        raise PermissionDenied
 
 
 class ProductsDeleteView(LoginRequiredMixin, DeleteView):
