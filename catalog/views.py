@@ -9,10 +9,18 @@ from django.views.generic import TemplateView, ListView, DetailView, CreateView,
 
 from catalog.forms import ProductsForm, VersionForm, ProductsModeratorForm
 from catalog.models import Products, Version
+from catalog.services import get_category_from_cache, get_products_from_cache
 
 
 class ProductsListView(LoginRequiredMixin, ListView):
     model = Products
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = get_products_from_cache()
+        category_id = self.kwargs.get('category_id')
+        return queryset.filter(category_id=category_id) if category_id else queryset
+
+
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -21,6 +29,7 @@ class ProductsListView(LoginRequiredMixin, ListView):
             version = product.version.filter(version_is_active=True).first()
             active_versions.append(version)
         context_data["versions"] = active_versions
+        context_data["categories"] = get_category_from_cache()
         return context_data
 
     # def get_context_data(self, **kwargs):
